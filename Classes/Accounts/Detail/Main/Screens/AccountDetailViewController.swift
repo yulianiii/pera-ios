@@ -51,7 +51,6 @@ final class AccountDetailViewController: PageContainer {
         sharedDataController: sharedDataController,
         bannerController: bannerController!
     )
-    private lazy var moonPayFlowCoordinator = MoonPayFlowCoordinator(presentingScreen: self)
     private lazy var meldFlowCoordinator = MeldFlowCoordinator(
         analytics: analytics,
         presentingScreen: self
@@ -212,17 +211,26 @@ extension AccountDetailViewController {
                 self.openAddAssetScreenIfPossible()
             case .requests:
                 self.assetListScreen.endEditing()
+                self.analytics.track(.recordAccountDetailScreen(type: .tapAssetInbox))
+                
                 self.openIncomingASAAccountInbox()
             case .swap:
                 self.assetListScreen.endEditing()
 
                 self.openSwapAssetIfPossible()
+            case .buy:
+                self.assetListScreen.endEditing()
+                self.analytics.track(.recordAccountDetailScreen(type: .buyAlgo))
+                
+                self.openBuySellOptionsIfPossible()
             case .send:
                 self.assetListScreen.endEditing()
+                self.analytics.track(.recordAccountDetailScreen(type: .tapSend))
 
                 self.openSendTransactionIfPossible()
             case .more:
                 self.assetListScreen.endEditing()
+                self.analytics.track(.recordAccountDetailScreen(type: .tapMore))
 
                 self.presentOptionsScreen()
             case .transactionOption:

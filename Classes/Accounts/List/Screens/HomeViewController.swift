@@ -15,10 +15,10 @@
 //
 //   HomeViewController.swift
 
-import Foundation
 import UIKit
 import MacaroonUIKit
 import MacaroonUtils
+import Combine
 
 final class HomeViewController:
     BaseViewController,
@@ -125,6 +125,9 @@ final class HomeViewController:
     private var incomingASAsRequestList: IncomingASAsRequestList?
     private var listWasScrolled = false
     
+    @Published private var isPrivacyModeTooltipVisible: Bool = false
+    private var portfolioTooltipCancellable: AnyCancellable?
+    
     init(
         swapDataStore: SwapDataStore,
         dataController: HomeDataController,
@@ -197,7 +200,8 @@ final class HomeViewController:
         pushNotificationController.requestAuthorization()
         pushNotificationController.sendDeviceDetails()
 
-        requestAppReview()        
+        requestAppReview()
+        setupGestures()
     }
 
     override func viewDidLayoutSubviews() {
@@ -223,6 +227,11 @@ final class HomeViewController:
 
         if isViewFirstAppeared {
             presentPasscodeFlowIfNeeded()
+        }
+        
+        if PeraUserDefaults.wasPrivacyTooltipPresented != true {
+            PeraUserDefaults.wasPrivacyTooltipPresented = true
+            isPrivacyModeTooltipVisible = true
         }
         
         dataController.fetchAnnouncements()
@@ -259,6 +268,20 @@ final class HomeViewController:
             self.configureNewNotificationBarButton()
         }
     }
+    
+    // MARK: - Setups
+    
+    private func setupGestures() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleOnTapAnywhere))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    // MARK: - Handlers
+    
+    @objc private func handleOnTapAnywhere() {
+        isPrivacyModeTooltipVisible = false
+    }
 }
 
 extension HomeViewController {
@@ -277,10 +300,18 @@ extension HomeViewController {
 
 extension HomeViewController {
     private func configureNotificationBarButton() {
+        let qrScannerBarButtonItem = ALGBarButtonItem(kind: .qr) { [weak self] in
+            guard let self else { return }
+            
+            self.analytics.track(.recordHomeScreen(type: .qrScan))
+            self.scanQRFlowCoordinator.launch()
+        }
+        
         let notificationBarButtonItem = ALGBarButtonItem(kind: .notification) { [weak self] in
             guard let self = self else {
                 return
             }
+            self.analytics.track(.recordHomeScreen(type: .notification))
 
             self.open(
                 .notifications,
@@ -288,20 +319,28 @@ extension HomeViewController {
             )
         }
 
-        rightBarButtonItems = [notificationBarButtonItem]
+        rightBarButtonItems = [notificationBarButtonItem, qrScannerBarButtonItem]
         setNeedsNavigationBarAppearanceUpdate()
     }
 
     private func configureNewNotificationBarButton() {
+        let qrScannerBarButtonItem = ALGBarButtonItem(kind: .qr) { [weak self] in
+            guard let self else { return }
+            
+            self.analytics.track(.recordHomeScreen(type: .qrScan))
+            self.scanQRFlowCoordinator.launch()
+        }
+        
         let notificationBarButtonItem = ALGBarButtonItem(kind: .newNotification) { [weak self] in
             guard let self = self else {
                 return
             }
             self.configureNotificationBarButton()
+            self.analytics.track(.recordHomeScreen(type: .notification))
             self.open(.notifications, by: .push)
         }
 
-        rightBarButtonItems = [notificationBarButtonItem]
+        rightBarButtonItems = [notificationBarButtonItem, qrScannerBarButtonItem]
         setNeedsNavigationBarAppearanceUpdate()
     }
     
@@ -319,6 +358,7 @@ extension HomeViewController {
             }
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
+                self.analytics.track(.recordHomeScreen(type: .assetInbox))
                 self.openASAInbox()
             }
         }
@@ -362,6 +402,7 @@ extension HomeViewController {
                     }
                     DispatchQueue.main.async { [weak self] in
                         guard let self else { return }
+                        self.analytics.track(.recordHomeScreen(type: .assetInbox))
                         self.openASAInbox()
                     }
                 }
@@ -503,17 +544,20 @@ extension HomeViewController {
                 by: .presentWithoutNavigationController
             )
         }
+        
+        cell.startObserving(event: .onAmountTap) {
+            ObservableUserDefaults.shared.isPrivacyModeEnabled.toggle()
+        }
+        
+        portfolioTooltipCancellable?.cancel()
+        portfolioTooltipCancellable = $isPrivacyModeTooltipVisible
+            .receive(on: DispatchQueue.main)
+            .sink { [weak cell] in cell?.isPrivacyModeTooltipVisible = $0 }
     }
 
     private func linkInteractors(
         _ cell: HomeQuickActionsCell
     ) {
-        cell.startObserving(event: .stake) {
-            [weak self] in
-            guard let self = self else { return }
-            self.stakingFlowCoordinator.launch()
-        }
-
         cell.startObserving(event: .swap) {
             [weak self] in
             guard let self = self else { return }
@@ -521,19 +565,26 @@ extension HomeViewController {
             self.swapAssetFlowCoordinator.resetDraft()
             self.swapAssetFlowCoordinator.launch()
         }
+        
+        cell.startObserving(event: .buy) {
+            [weak self] in
+            guard let self = self else { return }
+            self.analytics.track(.recordHomeScreen(type: .buyAlgo))
+            self.openBuySellOptions()
+        }
+        
+        cell.startObserving(event: .stake) {
+            [weak self] in
+            guard let self = self else { return }
+            self.analytics.track(.recordHomeScreen(type: .stake))
+            self.stakingFlowCoordinator.launch()
+        }
 
         cell.startObserving(event: .send) {
             [weak self] in
             guard let self = self else { return }
+            self.analytics.track(.recordHomeScreen(type: .send))
             self.sendTransactionFlowCoordinator.launch()
-        }
-
-        cell.startObserving(event: .scanQR) {
-            [weak self] in
-            guard let self = self else { return }
-
-            self.analytics.track(.recordHomeScreen(type: .qrScan))
-            self.scanQRFlowCoordinator.launch()
         }
     }
 
@@ -644,6 +695,8 @@ extension HomeViewController {
                     }
                 }
             }
+            
+            self.analytics.track(.recordHomeScreen(type: .sort))
 
             self.open(
                 .sortAccountList(
@@ -1300,8 +1353,7 @@ extension HomeViewController {
             by: .push
         ) as? IncomingASAAccountsViewController
         
-        screen?.eventHandler = {
-            [weak self, weak screen] event in
+        screen?.eventHandler = { [weak screen] event in
             guard let screen else {
                 return
             }

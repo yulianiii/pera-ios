@@ -1,4 +1,4 @@
-// Copyright 2022 Pera Wallet, LDA
+// Copyright 2025 Pera Wallet, LDA
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//   TapSwapInHomeEvent.swift
+//   ObservableUserDefaults.swift
 
-import Foundation
-import MacaroonVendors
+import Combine
 
-struct TapSwapInHomeEvent: ALGAnalyticsEvent {
-    let name: ALGAnalyticsEventName
-    let metadata: ALGAnalyticsMetadata
-
-    fileprivate init() {
-        self.name = .tapSwapInHome
-        self.metadata = [:]
-    }
-}
-
-extension AnalyticsEvent where Self == TapSwapInHomeEvent {
-    static func tapSwapInHome() -> Self {
-        return TapSwapInHomeEvent()
+final class ObservableUserDefaults {
+    
+    // MARK: - Properties
+    
+    static let shared = ObservableUserDefaults()
+    
+    // MARK: - Initialisers
+    
+    private init() {}
+    
+    // MARK: - Properties
+    
+    @Published var isPrivacyModeEnabled: Bool = PeraUserDefaults.isPrivacyModeEnabled ?? false {
+        didSet { PeraUserDefaults.isPrivacyModeEnabled = isPrivacyModeEnabled }
     }
 }

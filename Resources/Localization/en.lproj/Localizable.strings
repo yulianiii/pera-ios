@@ -147,6 +147,7 @@
 "title-active" = "Active";
 "tite-pinging" = "Pinging";
 "title-action-required" = "ACTION REQUIRED";
+"title-buy-algo" = "Buy Algo";
 
 // MARK: Account Type Selection
 "account-type-selection-add" = "I want to create an account";
@@ -1801,3 +1802,6 @@ FAQ section.";
 "title-keyreg-txn-note" = "Note";
 "title-keyreg-txn-last" = "Last valid round";
 "title-txn-completed" = "Transaction completed";
+
+/// MARK: - Privacy Mode
+"tooltip-privacy-mode" = "Tap value to hide your balance";
