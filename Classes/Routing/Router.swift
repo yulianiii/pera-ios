@@ -492,6 +492,12 @@ final class Router:
                     )
                 )
             }
+        case .qrScanner:
+            route(
+                to: .qrScanner(canReadWCSession: true),
+                from: findVisibleScreen(over: rootViewController),
+                by: .present
+            )
         }
     }
     
