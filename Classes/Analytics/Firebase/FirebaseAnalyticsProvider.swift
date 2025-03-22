@@ -29,7 +29,7 @@ final class FirebaseAnalyticsProvider: ALGAnalyticsProvider {
 
     func setup() {
         FirebaseApp.configure()
-        instance.setAnalyticsCollectionEnabled(true)
+        instance.setAnalyticsCollectionEnabled(false)
     }
 
     func identify<T: AnalyticsUser>(
