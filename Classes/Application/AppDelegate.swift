@@ -233,13 +233,14 @@ class AppDelegate:
     }
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        guard let actionType = ApplicationShortcutItemType(rawValue: shortcutItem.type) else {
+            return
+        }
             
-            guard let actionType = ApplicationShortcutItemType(rawValue: shortcutItem.type) else { return }
-            
-            switch actionType {
-            case .scanQR:
-                router.launch(deeplink: .qrScanner)
-            }
+        switch actionType {
+        case .scanQR:
+            router.launch(deeplink: .qrScanner)
+        }
     }
 }
 
