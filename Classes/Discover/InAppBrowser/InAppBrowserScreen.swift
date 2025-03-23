@@ -40,7 +40,8 @@ where ScriptMessage: InAppBrowserScriptMessage {
     private(set) lazy var userContentController = createUserContentController()
 
     private(set) var userAgent: String? = nil
-
+    private(set) var fakeUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
+    
     private var sourceURL: URL?
 
     private var isViewLayoutLoaded = false
@@ -221,11 +222,21 @@ where ScriptMessage: InAppBrowserScriptMessage {
         preferences: WKWebpagePreferences,
         decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void
     ) {
-        guard let url = navigationAction.request.url else {
+        guard var url = navigationAction.request.url else {
             decisionHandler(.cancel, preferences)
             return
         }
-
+        
+        if getPlatform() == "arm64" {
+            if !url.absoluteString.contains("discover-mobile.perawallet.app") {
+                webView.customUserAgent = fakeUserAgent
+            } else {
+                webView.customUserAgent = userAgent
+            }
+        } else {
+            webView.customUserAgent = userAgent
+        }
+        
         let policy: WKNavigationActionPolicy
         if url.isMailURL {
             policy = navigateToMail(url)
@@ -445,5 +456,16 @@ extension InAppBrowserScreen {
         let src: DeeplinkSource = .walletConnectSessionRequestForDiscover(url)
         launchController.receive(deeplinkWithSource: src)
         return .cancel
+    }
+}
+
+extension InAppBrowserScreen {
+    private func getPlatform() -> String {
+        var utsname = utsname()
+        uname(&utsname)
+        let machine = withUnsafePointer(to: &utsname.machine) {
+            String(cString: UnsafeRawPointer($0).assumingMemoryBound(to: CChar.self))
+        }
+        return machine
     }
 }
