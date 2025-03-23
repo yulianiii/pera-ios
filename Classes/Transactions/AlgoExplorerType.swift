@@ -23,7 +23,7 @@ enum AlgoExplorerType {
         switch network {
         case .testnet:
             return testNetTransactionURL(with: id)
-        case .mainnet:
+        case .mainnet, .localnet:
             return mainNetTransactionURL(with: id)
         }
     }

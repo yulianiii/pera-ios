@@ -204,7 +204,7 @@ extension User {
         on network: ALGAPI.Network
     ) -> String? {
         switch network {
-        case .mainnet: return deviceIDOnMainnet
+        case .mainnet, .localnet: return deviceIDOnMainnet
         case .testnet: return deviceIDOnTestnet
         }
     }
@@ -214,7 +214,7 @@ extension User {
         on network: ALGAPI.Network
     ) {
         switch network {
-        case .mainnet: deviceIDOnMainnet = deviceID
+        case .mainnet, .localnet: deviceIDOnMainnet = deviceID
         case .testnet: deviceIDOnTestnet = deviceID
         }
         

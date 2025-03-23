@@ -3576,6 +3576,9 @@
 		2BFFEA0425DD33E00009F30C /* PassphraseVerifyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BFFEA0325DD33E00009F30C /* PassphraseVerifyDataSource.swift */; };
 		2BFFEA0525DD33E00009F30C /* PassphraseVerifyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BFFEA0325DD33E00009F30C /* PassphraseVerifyDataSource.swift */; };
 		2BFFEA0625DD33E00009F30C /* PassphraseVerifyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BFFEA0325DD33E00009F30C /* PassphraseVerifyDataSource.swift */; };
+		3AB6F6AF2D8F927E00CC84AB /* LocalNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB6F6AE2D8F927E00CC84AB /* LocalNodeView.swift */; };
+		3AB6F6B02D8F927E00CC84AB /* LocalNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB6F6AE2D8F927E00CC84AB /* LocalNodeView.swift */; };
+		3AB6F6B12D8F927E00CC84AB /* LocalNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB6F6AE2D8F927E00CC84AB /* LocalNodeView.swift */; };
 		543447762D5355820080AF4D /* OptOutAssetCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543447752D5355800080AF4D /* OptOutAssetCoordinator.swift */; };
 		543447772D5355820080AF4D /* OptOutAssetCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543447752D5355800080AF4D /* OptOutAssetCoordinator.swift */; };
 		543447782D5355820080AF4D /* OptOutAssetCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543447752D5355800080AF4D /* OptOutAssetCoordinator.swift */; };
@@ -9134,6 +9137,7 @@
 		2BFA924729CCCCEC0097E1B1 /* OptInAssetListErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptInAssetListErrorViewModel.swift; sourceTree = "<group>"; };
 		2BFA924B29CCCE320097E1B1 /* OptInAssetNextListErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptInAssetNextListErrorViewModel.swift; sourceTree = "<group>"; };
 		2BFFEA0325DD33E00009F30C /* PassphraseVerifyDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassphraseVerifyDataSource.swift; sourceTree = "<group>"; };
+		3AB6F6AE2D8F927E00CC84AB /* LocalNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNodeView.swift; sourceTree = "<group>"; };
 		543447752D5355800080AF4D /* OptOutAssetCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptOutAssetCoordinator.swift; sourceTree = "<group>"; };
 		547CA66B2D66363800714338 /* ObservableUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableUserDefaults.swift; sourceTree = "<group>"; };
 		547CA66F2D663BA600714338 /* PeraUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeraUserDefaults.swift; sourceTree = "<group>"; };
@@ -10708,6 +10712,7 @@
 			children = (
 				0467677F2756A65F00C88F21 /* SingleSelectionListView.swift */,
 				046767802756A65F00C88F21 /* SingleSelectionListViewTheme.swift */,
+				3AB6F6AE2D8F927E00CC84AB /* LocalNodeView.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -24323,6 +24328,7 @@
 				17BD4E462292F1260003E49A /* TransactionParams.swift in Sources */,
 				95B01153276A7F9C00B5CA7B /* EditNoteScreenTheme.swift in Sources */,
 				8B7852DB2C0EE80700B41962 /* IncomingASAAccountsListLayout+Theme.swift in Sources */,
+				3AB6F6B12D8F927E00CC84AB /* LocalNodeView.swift in Sources */,
 				2B2BCC262936367B00465720 /* ALGSwapControllerDraft.swift in Sources */,
 				D4DCD6D529D74C31007CA6B8 /* WebImportGoToTransferAccountsInstructionViewModel.swift in Sources */,
 				D4B7EB912A402770008AB697 /* UndoRekeyScreen.swift in Sources */,
@@ -26150,6 +26156,7 @@
 				2BAAF4C628E4B63000FC59AF /* ConfirmSwapDataController.swift in Sources */,
 				D44265C127746E3C0094E2CA /* TransactionHistoryHeaderViewTheme.swift in Sources */,
 				8B6F2B222BE2933400C3F78E /* IncomingASAAccountInboxAPIDataController.swift in Sources */,
+				3AB6F6B02D8F927E00CC84AB /* LocalNodeView.swift in Sources */,
 				1736FB8C28ACFF37002BB713 /* OnboardSetPinCodeEvent.swift in Sources */,
 				D4B93D4D29E593370095875C /* RekeyedAccountSelectionListDataController.swift in Sources */,
 				D4BDD5672AF5389C00530F95 /* BackUpAccountSelectionListHeaderViewModel.swift in Sources */,
@@ -29431,6 +29438,7 @@
 				2B26271E284E3A8700ADE371 /* AlgoTransactionItemViewModel.swift in Sources */,
 				D4150DDB27C53E350064F736 /* NoContentWithActionViewIllustratedTheme.swift in Sources */,
 				8B7852D92C0EE80700B41962 /* IncomingASAAccountsListLayout+Theme.swift in Sources */,
+				3AB6F6AF2D8F927E00CC84AB /* LocalNodeView.swift in Sources */,
 				D4B7EB8F2A402770008AB697 /* UndoRekeyScreen.swift in Sources */,
 				17C9331F29499C28000EE03D /* DiscoverSocialMediaRouter.swift in Sources */,
 				2BC1826723D882D500888476 /* AlgorandSDK.swift in Sources */,

@@ -82,6 +82,9 @@ class AppDelegate:
         
         walletConnectCoordinator.setup()
 
+        let nc = NotificationCenter.default
+        nc.addObserver(self, selector: #selector(prepareForLaunch), name: Notification.Name.updateLocalNetNotification, object: nil)
+        
         return true
     }
     
@@ -234,7 +237,7 @@ class AppDelegate:
 }
 
 extension AppDelegate {
-    func prepareForLaunch() {
+    @objc func prepareForLaunch() {
         appLaunchController.prepareForLaunch()
     }
     
@@ -489,6 +492,7 @@ extension AppDelegate {
         switch api.network {
         case .mainnet: networkBannerView.backgroundColor = .clear
         case .testnet: networkBannerView.backgroundColor = Colors.Testnet.background.uiColor
+        case .localnet: networkBannerView.backgroundColor = Colors.Localnet.background.uiColor
         }
 
         rootViewController.setNeedsStatusBarAppearanceUpdate()

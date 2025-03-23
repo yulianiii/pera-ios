@@ -17,6 +17,7 @@
 
 import Foundation
 import UIKit
+import KeychainAccess
 
 private enum AppTarget {
     case staging, prod
@@ -38,6 +39,14 @@ class Environment {
     
     lazy var algodToken: String = {
         guard let token = Bundle.main.infoDictionary?["ALGOD_TOKEN"] as? String else {
+            return ""
+        }
+        return ""
+    }()
+    
+    var algodLocalToken: String = {
+        var keychain = KeychainAccess.Keychain(service: "com.algorand.algorand.token.private").accessibility(.whenUnlocked)
+        guard var token = keychain.string(for: "algodLocalToken") as? String else {
             return ""
         }
         return token
@@ -67,18 +76,8 @@ class Environment {
     lazy var testNetAlgodApi = "\(schema)://\(testNetAlgodHost)/v2"
     lazy var testNetIndexerApi = "\(schema)://\(testNetIndexerHost)/v2"
 
-    lazy var mainNetAlgodHost: String = {
-        guard let host = Bundle.main.infoDictionary?["ALGOD_MAINNET_HOST"] as? String else {
-            return ""
-        }
-        return host
-    }()
-    lazy var mainNetIndexerHost: String = {
-        guard let host = Bundle.main.infoDictionary?["INDEXER_MAINNET_HOST"] as? String else {
-            return ""
-        }
-        return host
-    }()
+    lazy var mainNetAlgodHost = "mainnet-api.algonode.cloud"
+    lazy var mainNetIndexerHost = "mainnet-idx.algonode.cloud"
     lazy var mainNetAlgodApi = "\(schema)://\(mainNetAlgodHost)/v2"
     lazy var mainNetIndexerApi = "\(schema)://\(mainNetIndexerHost)/v2"
     
@@ -86,6 +85,13 @@ class Environment {
     let mainNetARC59AppID: Int64 = 2449590623
     let testNetARC59AppAddress = "YIIC6GF4DUJYZTYTZ5UEOAXONUUKZRDFOTV4EKSGD5E7BYE6EE3IVPYEDQ"
     let mainNetARC59AppAddress = "EZRVNZFJGOUZC67FUMEC7ZMVP232TPICFTQCVZ6EQEIRRT3TIHSKZULRNI"
+    
+    var localMainNetAlgodApi: String = {
+        let url = UserDefaults.standard.string(forKey: "urlString") ?? ""
+        var port = UserDefaults.standard.string(forKey: "portString") ?? ""
+        port = port.isEmpty ? "" : ":\(port)"
+        return url + port + "/v2"
+    }()
     
     lazy var serverHost: String = {
         switch target {
@@ -189,7 +195,7 @@ class Environment {
         switch network {
         case .testnet:
             return cardsTestNetBaseUrl
-        case .mainnet:
+        case .mainnet, .localnet:
             return cardsMainNetBaseUrl
         }
     }

@@ -312,6 +312,12 @@ extension Colors {
         case background = "Testnet/bg"
         case text = "Testnet/text"
     }
+    
+    enum Localnet:
+        String,
+        Color {
+        case background = "Text/grayLighter"
+    }
 }
 
 extension Colors {

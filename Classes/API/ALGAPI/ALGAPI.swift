@@ -65,7 +65,8 @@ extension ALGAPI {
     enum Network: String {
         case testnet = "testnet"
         case mainnet = "mainnet"
-
+        case localnet = "localnet"
+        
         /// WC v1
         var allowedChainIDs: [Int] {
             switch self {
@@ -74,7 +75,7 @@ extension ALGAPI {
                     algorandWalletConnectV1ChainID,
                     algorandWalletConnectV1TestNetChainID
                 ]
-            case .mainnet:
+            case .mainnet, .localnet:
                 return [
                     algorandWalletConnectV1ChainID,
                     algorandWalletConnectV1MainNetChainID
@@ -87,7 +88,7 @@ extension ALGAPI {
             switch self {
             case .testnet:
                 return algorandWalletConnectV2TestNetChainReference
-            case .mainnet:
+            case .mainnet, .localnet:
                 return algorandWalletConnectV2MainNetChainReference
             }
         }
@@ -98,6 +99,10 @@ extension ALGAPI {
         
         var isTestnet: Bool {
             return self == .testnet
+        }
+        
+        var isLocalNet: Bool {
+            return self == .localnet
         }
     }
 }

@@ -26,12 +26,13 @@ final class NodeSettingsViewController: BaseViewController {
     
     private lazy var theme = Theme()
     private lazy var nodeSettingsView = SingleSelectionListView()
+    private lazy var localNodeSettingsView = LocalNodeView()
     
     private var selectedNetwork: ALGAPI.Network {
         return api?.network ?? .mainnet
     }
     
-    private let nodes = [mainNetNode, testNetNode]
+    private let nodes = [mainNetNode, testNetNode, localNetNode]
     
     private lazy var pushNotificationController = PushNotificationController(
         target: target,
@@ -58,9 +59,32 @@ final class NodeSettingsViewController: BaseViewController {
 extension NodeSettingsViewController {
     private func addNodeSettingsView() {
         view.addSubview(nodeSettingsView)
+        view.addSubview(localNodeSettingsView)
         
-        nodeSettingsView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+        nodeSettingsView.snp.makeConstraints { make in
+            make.top.equalTo(self.view.snp.top).offset(0)
+            make.leading.equalTo(12)
+            make.width.equalTo(self.view.frame.width - 40)
+            make.height.equalTo(400)
+        }
+
+        localNodeSettingsView.snp.makeConstraints { make in
+            make.top.equalTo(nodeSettingsView.snp.bottom).offset(-172)
+            make.leading.equalTo(12)
+            make.width.equalTo(self.view.frame.width - 40)
+            make.height.equalTo(400)
+        }
+        
+        localNodeSettingsView.alpha = selectedNetwork == .localnet ? 1.0 : 0.0
+        
+        view.bringSubviewToFront(localNodeSettingsView)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        let isValidLocalNode = UserDefaults.standard.bool(forKey: "isValidLocalNode")
+            
+        if selectedNetwork == .localnet && !isValidLocalNode {
+            select(mainNetNode)
         }
     }
 }
@@ -151,6 +175,8 @@ extension NodeSettingsViewController {
         
         let oldNetwork = selectedNetwork
         
+        localNodeSettingsView.alpha = node.network == .localnet ? 1.0 : 0.0
+        
         api?.setupNetworkBase(node.network)
         change()
         
@@ -158,7 +184,9 @@ extension NodeSettingsViewController {
             [weak self] error in
             guard let self = self else { return }
             
-            self.loadingController?.stopLoading()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.loadingController?.stopLoading()
+            }
             
             guard let error = error else {
                 self.pushNotificationController.unregisterDevice(from: oldNetwork)
@@ -211,4 +239,13 @@ let testNetNode = AlgorandNode(
     indexerToken: Environment.current.indexerToken,
     name: "node-settings-default-test-node-name".localized,
     network: .testnet
+)
+
+var localNetNode = AlgorandNode(
+    algodAddress: Environment.current.localMainNetAlgodApi,
+    indexerAddress: Environment.current.mainNetAlgodHost,
+    algodToken: Environment.current.algodLocalToken,
+    indexerToken: Environment.current.indexerToken,
+    name: "node-settings-default-local-name".localized,
+    network: .localnet
 )
