@@ -325,6 +325,8 @@ extension HomeAPIDataController {
     private func appendAccountNotBackedUpItems(
         into snapshot: inout Snapshot
     ) {
+        // Personal preference not to show back up message
+        /*
         snapshot.appendSections([ .accountNotBackedUpWarning ])
 
         let viewModel = AccountNotBackedUpWarningViewModel()
@@ -333,6 +335,7 @@ extension HomeAPIDataController {
             items,
             toSection: .accountNotBackedUpWarning
         )
+         */
     }
 
     private func shouldDisplayCriticalWarningForNotBackedUpAccounts(_ accounts: [AccountHandle]) -> Bool {
