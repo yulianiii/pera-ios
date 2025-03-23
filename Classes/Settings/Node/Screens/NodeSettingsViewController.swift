@@ -58,6 +58,8 @@ final class NodeSettingsViewController: BaseViewController {
 
 extension NodeSettingsViewController {
     private func addNodeSettingsView() {
+        UserDefaults.standard.set(true, forKey: "disablePolling")
+        
         view.addSubview(nodeSettingsView)
         view.addSubview(localNodeSettingsView)
         
@@ -86,6 +88,8 @@ extension NodeSettingsViewController {
         if selectedNetwork == .localnet && !isValidLocalNode {
             select(mainNetNode)
         }
+        
+        UserDefaults.standard.set(false, forKey: "disablePolling")
     }
 }
 
@@ -215,11 +219,6 @@ extension NodeSettingsViewController {
         _ network: ALGAPI.Network
     ) {
         nodeSettingsView.reloadData()
-        
-        NotificationCenter.default.post(
-            name: Self.didUpdateNetwork,
-            object: self
-        )
     }
 }
 

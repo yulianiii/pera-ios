@@ -178,6 +178,11 @@ extension SharedAPIDataController {
 
 extension SharedAPIDataController {
     func startPolling() {
+        let disablePolling = UserDefaults.standard.bool(forKey: "disablePolling")
+        if disablePolling {
+            return
+        }
+        
         $status.mutate { $0 = .running }
         blockProcessor.start()
 
@@ -197,6 +202,11 @@ extension SharedAPIDataController {
     }
     
     func resetPolling() {
+        let disablePolling = UserDefaults.standard.bool(forKey: "disablePolling")
+        if disablePolling {
+            return
+        }
+        
         $status.mutate { $0 = .suspended }
         blockProcessor.cancel()
         

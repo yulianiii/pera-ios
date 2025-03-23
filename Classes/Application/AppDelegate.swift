@@ -81,9 +81,6 @@ class AppDelegate:
         launch(with: launchOptions)
         
         walletConnectCoordinator.setup()
-
-        let nc = NotificationCenter.default
-        nc.addObserver(self, selector: #selector(prepareForLaunch), name: Notification.Name.updateLocalNetNotification, object: nil)
         
         return true
     }

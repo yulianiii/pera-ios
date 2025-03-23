@@ -87,6 +87,12 @@ final class LocalNodeView: UIView, UITextFieldDelegate {
         self.addGestureRecognizer(tap)
     }
     
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+
+        updatedLocalNetValues()
+    }
+    
     @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
         self.endEditing(true)
         updatedLocalNetValues()
@@ -104,6 +110,10 @@ final class LocalNodeView: UIView, UITextFieldDelegate {
         updatedLocalNetValues()
         return true
     }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        updatedLocalNetValues()
+    }
 
     private func textFieldShouldEndEditing(textField: UITextField) -> Bool {
         return true
@@ -119,16 +129,23 @@ final class LocalNodeView: UIView, UITextFieldDelegate {
     func updatedLocalNetValues() {
         var validLocalNode = 0
         
-        if let text = urlTextField.text, text.isValidURL {
-            urlString = text
-            urlTextField.textColor = .black
+        if let urlTextFieldText = urlTextField.text, !urlTextFieldText.isEmpty {
+            var text = urlTextFieldText.replacingOccurrences(of: " ", with: "")
+            if !text.lowercased().contains("http") {
+                text = "http://" + text
+            }
             
-            validLocalNode += 1
+            if text.isValidURL {
+                urlString = text
+                urlTextField.textColor = .black
+                
+                validLocalNode += 1
+            }
         } else {
             urlTextField.textColor = .red
         }
         
-        if let apiKeyTextFieldText = apiKeyTextField.text {
+        if let apiKeyTextFieldText = apiKeyTextField.text, !apiKeyTextFieldText.isEmpty {
             let text = apiKeyTextFieldText.replacingOccurrences(of: " ", with: "")
             let keychain = KeychainAccess.Keychain(service: "com.algorand.algorand.token.private").accessibility(.whenUnlocked)
              keychain.set(text, for: "algodLocalToken")
@@ -156,8 +173,7 @@ final class LocalNodeView: UIView, UITextFieldDelegate {
         isValidLocalNode = validLocalNode == 3
         
         if isValidLocalNode {
-            let nc = NotificationCenter.default
-            nc.post(name: Notification.Name.updateLocalNetNotification, object: nil)
+            UserDefaults.standard.set(false, forKey: "disablePolling")
         }
     }
 }
