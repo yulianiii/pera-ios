@@ -1301,11 +1301,7 @@ extension HomeViewController {
     /// <note>
     /// Sort by order to be presented.
     private var alertItems: [any AlertItem] {
-        return [
-            makeCopyAddressIntroductionAlertItem(),
-            makeSwapIntroductionAlertItem(),
-            makeBuyGiftCardsWithCryptoIntroductionAlertItem()
-        ]
+        return []
     }
 
     private func makeCopyAddressIntroductionAlertItem() -> any AlertItem {
