@@ -39,8 +39,8 @@ struct DeeplinkQR {
     func walletConnectUrl() -> URL? {
         let deeplinkConfig = ALGAppTarget.current.deeplinkConfig
         let universalLinkConfig = ALGAppTarget.current.universalLinkConfig
-
-        guard let scheme = url.scheme, url.host != nil else {
+        
+        guard let scheme = url.scheme else {
             return nil
         }
 
