@@ -151,8 +151,6 @@
     <key>CFBundleURLTypes</key>
     <array>
         <dict>
-            <key>CFBundleURLName</key>
-            <string>com.inailuy.algorand</string>
             <key>CFBundleURLSchemes</key>
             <array>
                 <string>wc</string>
