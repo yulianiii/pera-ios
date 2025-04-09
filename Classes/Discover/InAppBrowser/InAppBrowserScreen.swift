@@ -226,8 +226,8 @@ where ScriptMessage: InAppBrowserScriptMessage {
             decisionHandler(.cancel, preferences)
             return
         }
-        
-        if getPlatform() == "arm64" {
+
+        if getPlatform() == "arm64" || getPlatform().containsCaseInsensitive("iPad") {
             if !url.absoluteString.contains("discover-mobile.perawallet.app") {
                 webView.customUserAgent = fakeUserAgent
             } else {
