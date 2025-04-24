@@ -133,7 +133,7 @@
 			<key>UIApplicationShortcutItemIconSymbolName</key>
 			<string>qrcode</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>QickActionScanTitle</string>
+			<string>QuickActionScanTitle</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>QuickAction.ScanQR</string>
 		</dict>
