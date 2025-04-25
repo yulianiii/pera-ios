@@ -493,15 +493,15 @@ final class Router:
                 )
             }
         case .qrScanner:
-            let session = self.appConfiguration.session
-            if let authenticatedUser = session.authenticatedUser,
-               authenticatedUser.accounts.isNonEmpty {
-                route(
-                    to: .qrScanner(canReadWCSession: true),
-                    from: findVisibleScreen(over: rootViewController),
-                    by: .present
-                )
+            guard let authenticatedUser = appConfiguration.session.authenticatedUser, authenticatedUser.accounts.isNonEmpty else {
+                return
             }
+            
+            route(
+                to: .qrScanner(canReadWCSession: true),
+                from: findVisibleScreen(over: rootViewController),
+                by: .present
+            )
         }
     }
     
