@@ -748,10 +748,15 @@ final class Router:
                 configuration: configuration
             )
         case let .qrScanner(canReadWCSession):
-            viewController = QRScannerViewController(
+            let qrScannerViewController = QRScannerViewController(
                 canReadWCSession: canReadWCSession,
                 configuration: configuration
             )
+            
+            let tabBarController = rootViewController.mainContainer
+            tabBarController.assignQRScannerCoordinator(viewController: qrScannerViewController)
+                         
+            viewController = qrScannerViewController
         case let .qrGenerator(title, draft, isTrackable):
             let qrCreationController = QRCreationViewController(
                 draft: draft,
