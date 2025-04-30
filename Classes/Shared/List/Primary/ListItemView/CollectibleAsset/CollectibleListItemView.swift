@@ -1,4 +1,4 @@
-// Copyright 2022 Pera Wallet, LDA
+// Copyright 2022-2025 Pera Wallet, LDA
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
 
 //   CollectibleListItemView.swift
 
-import Foundation
 import MacaroonUIKit
 import MacaroonURLImage
 import UIKit
@@ -170,8 +169,6 @@ extension CollectibleListItemView {
     
     private func addLoadingIndicator(_ theme: CollectibleListItemViewTheme) {
         loadingIndicatorView.applyStyle(theme.loadingIndicator)
-
-
         iconOverlayView.addSubview(loadingIndicatorView)
         loadingIndicatorView.snp.makeConstraints {
             $0.fitToSize(theme.loadingIndicatorSize)
