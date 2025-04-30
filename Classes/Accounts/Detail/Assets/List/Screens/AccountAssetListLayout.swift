@@ -1,4 +1,4 @@
-// Copyright 2022 Pera Wallet, LDA
+// Copyright 2022-2025 Pera Wallet, LDA
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -40,10 +40,11 @@ final class AccountAssetListLayout: NSObject {
         super.init()
     }
 
-    static func build(swipeActionCallback: ((_ indexPath: IndexPath) -> SwipeMenuConfiguration?)? = nil) -> UICollectionViewLayout {
+    static func build(backgroundColor: UIColor? = nil, swipeActionCallback: ((_ indexPath: IndexPath) -> SwipeMenuConfiguration?)? = nil) -> UICollectionViewLayout {
         
         var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
         configuration.showsSeparators = false
+        configuration.backgroundColor = backgroundColor
         
         configuration.trailingSwipeActionsConfigurationProvider = {
             
